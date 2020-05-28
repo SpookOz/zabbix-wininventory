@@ -47,58 +47,58 @@ $OperatingSystem = Get-WmiObject -Class Win32_OperatingSystem
 $OSInstallDate = ($OperatingSystem.ConvertToDateTime($OperatingSystem.InstallDate).ToShortDateString())
 $BIOSDate = $BIOS.ConvertToDateTime($BIOS.releasedate).ToShortDateString()
 
-$outputWinOS = "- CHQ.WinOS "
+$outputWinOS = "- inv.WinOS "
 $outputWinOS += '"'
 $outputWinOS += "$($WinOS)"
 $outputWinOS += '"'
 
-$outputModelNum = "- CHQ.ModelNum "
+$outputModelNum = "- inv.ModelNum "
 $outputModelNum += '"'
 $outputModelNum += "$($ModelNum)"
 $outputModelNum += '"'
 
-$outputManuf = "- CHQ.Manuf "
+$outputManuf = "- inv.Manuf "
 $outputManuf += '"'
 $outputManuf += "$($Manuf)"
 $outputManuf += '"'
 
-$outputWinDomain = "- CHQ.WinDomain "
+$outputWinDomain = "- inv.WinDomain "
 $outputWinDomain += '"'
 $outputWinDomain += "$($WinDomain)"
 $outputWinDomain += '"'
 
-$outputOwner = "- CHQ.Owner "
+$outputOwner = "- inv.Owner "
 $outputOwner += '"'
 $outputOwner += "$($Owner)"
 $outputOwner += '"'
 
-$outputLoggedon = "- CHQ.Loggedon "
+$outputLoggedon = "- inv.Loggedon "
 $outputLoggedon += '"'
 $outputLoggedon += "$($Loggedon)"
 $outputLoggedon += '"'
 
-$outputOSInstallDate = "- CHQ.OSInstallDate "
+$outputOSInstallDate = "- inv.OSInstallDate "
 $outputOSInstallDate += '"'
 $outputOSInstallDate += "$($OSInstallDate)"
 $outputOSInstallDate += '"'
 
-$outputBIOSDate = "- CHQ.BIOSDate "
+$outputBIOSDate = "- inv.BIOSDate "
 $outputBIOSDate += '"'
 $outputBIOSDate += "$($BIOSDate)"
 $outputBIOSDate += '"'
 
-Write-Output "- CHQ.WinArch $Winarch" | Out-File -Encoding "ASCII" -FilePath $env:temp$SenderargInvStatus
+Write-Output "- inv.WinArch $Winarch" | Out-File -Encoding "ASCII" -FilePath $env:temp$SenderargInvStatus
 Add-Content $env:temp$SenderargInvStatus $outputWinOS
-Add-Content $env:temp$SenderargInvStatus "- CHQ.WinBuild $WinBuild"
+Add-Content $env:temp$SenderargInvStatus "- inv.WinBuild $WinBuild"
 Add-Content $env:temp$SenderargInvStatus $outputModelNum
 Add-Content $env:temp$SenderargInvStatus $outputManuf
-Add-Content $env:temp$SenderargInvStatus "- CHQ.SerialNum $SerialNum"
+Add-Content $env:temp$SenderargInvStatus "- inv.SerialNum $SerialNum"
 Add-Content $env:temp$SenderargInvStatus $outputWinDomain
 Add-Content $env:temp$SenderargInvStatus $outputOwner
 Add-Content $env:temp$SenderargInvStatus $outputLoggedon
-Add-Content $env:temp$SenderargInvStatus "- CHQ.IPAddress $IPAddress"
-Add-Content $env:temp$SenderargInvStatus "- CHQ.IPGateway $IPGateway"
-Add-Content $env:temp$SenderargInvStatus "- CHQ.PrimDNSServer $PrimDNSServer"
+Add-Content $env:temp$SenderargInvStatus "- inv.IPAddress $IPAddress"
+Add-Content $env:temp$SenderargInvStatus "- inv.IPGateway $IPGateway"
+Add-Content $env:temp$SenderargInvStatus "- inv.PrimDNSServer $PrimDNSServer"
 Add-Content $env:temp$SenderargInvStatus $outputBIOSDate
 Add-Content $env:temp$SenderargInvStatus $outputOSInstallDate
 
