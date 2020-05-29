@@ -39,7 +39,7 @@ Information Gathered --> Inventory Field
 ## Files Included
 
 - wininventory.xml: Template to import into Zabbix.
-- get-inventory-2020.ps1: Powershell script. By default, this will be downloaded automatically by the template, so you don't need to manually download it. However, if you want to turn that option off (for security or if you are making modifications to the script) this file must be placed in a "plugins" directory under your Zabbix Agent install folder (eg: C:\Program Files\Zabbix Agent\plugins).
+- get-inventory-2020.ps1: Powershell script. By default, you need to manually download this and place it in the plugins directory (more info below). However, it can be downloaded automatically by the template.
 
 
 ## Installing
