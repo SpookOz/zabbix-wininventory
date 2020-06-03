@@ -47,6 +47,44 @@ $OperatingSystem = Get-WmiObject -Class Win32_OperatingSystem
 $OSInstallDate = ($OperatingSystem.ConvertToDateTime($OperatingSystem.InstallDate).ToShortDateString())
 $BIOSDate = $BIOS.ConvertToDateTime($BIOS.releasedate).ToShortDateString()
 
+# ------------------------------------------------------------------------- #
+# This part gets location information. It turns on location tracking. If this is a privacy concern, you can to next comment
+# ------------------------------------------------------------------------- #
+
+	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location")) {
+		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Force | Out-Null
+	}
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location" -Name "Value" -Type String -Value "Allow"
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Overrides\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" -Name "SensorPermissionState" -Type DWord -Value 1
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\lfsvc\Service\Configuration" -Name "Status" -Type DWord -Value 1
+
+Add-Type -AssemblyName System.Device #Required to access System.Device.Location namespace
+$GeoWatcher = New-Object System.Device.Location.GeoCoordinateWatcher #Create the required object
+$GeoWatcher.Start() #Begin resolving current locaton
+
+while (($GeoWatcher.Status -ne 'Ready') -and ($GeoWatcher.Permission -ne 'Denied')) {
+    Start-Sleep -Milliseconds 100 #Wait for discovery.
+}  
+
+if ($GeoWatcher.Permission -eq 'Denied'){
+    $Latitude = '0'
+    $Longitude = '0'
+} else {
+    $Latitude = $GeoWatcher.Position.Location | Select Latitude,Longitude | foreach { $_.Latitude }
+    $Longitude = $GeoWatcher.Position.Location | Select Latitude,Longitude | foreach { $_.Longitude }
+}
+
+$outputGeoLocation = "- inv.Geolocation "
+$outputGeoLocation += '"'
+$outputGeoLocation += "$($Latitude)"
+$outputGeoLocation += ' '
+$outputGeoLocation += "$($Longitude)"
+$outputGeoLocation += '"'
+
+# ------------------------------------------------------------------------- #
+# Delete above here to remove location data
+# ------------------------------------------------------------------------- #
+
 $outputWinOS = "- inv.WinOS "
 $outputWinOS += '"'
 $outputWinOS += "$($WinOS)"
@@ -87,6 +125,8 @@ $outputBIOSDate += '"'
 $outputBIOSDate += "$($BIOSDate)"
 $outputBIOSDate += '"'
 
+
+
 Write-Output "- inv.WinArch $Winarch" | Out-File -Encoding "ASCII" -FilePath $env:temp$SenderargInvStatus
 Add-Content $env:temp$SenderargInvStatus $outputWinOS
 Add-Content $env:temp$SenderargInvStatus "- inv.WinBuild $WinBuild"
@@ -101,6 +141,7 @@ Add-Content $env:temp$SenderargInvStatus "- inv.IPGateway $IPGateway"
 Add-Content $env:temp$SenderargInvStatus "- inv.PrimDNSServer $PrimDNSServer"
 Add-Content $env:temp$SenderargInvStatus $outputBIOSDate
 Add-Content $env:temp$SenderargInvStatus $outputOSInstallDate
+Add-Content $env:temp$SenderargInvStatus $outputGeoLocation
 
 # ------------------------------------------------------------------------- #
 # This part sends the information in the temp file to Zabbix

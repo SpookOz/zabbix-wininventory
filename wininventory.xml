@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-05-29T00:08:02Z</date>
+    <date>2020-06-03T04:10:39Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -34,6 +34,21 @@
                     <trends>0</trends>
                     <value_type>TEXT</value_type>
                     <inventory_link>SERIALNO_B</inventory_link>
+                    <applications>
+                        <application>
+                            <name>WinInventory-Panel</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>GeoLocation</name>
+                    <type>TRAP</type>
+                    <key>inv.Geolocation</key>
+                    <delay>0</delay>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <inventory_link>LOCATION</inventory_link>
                     <applications>
                         <application>
                             <name>WinInventory-Panel</name>
@@ -252,7 +267,7 @@
                     <name>GetInventory</name>
                     <type>ZABBIX_ACTIVE</type>
                     <key>system.run[powershell.exe -NoProfile -ExecutionPolicy Bypass -file &quot;%programfiles%\Zabbix Agent\plugins\get-inventory-2020.ps1&quot;,nowait]</key>
-                    <delay>6h</delay>
+                    <delay>3h</delay>
                     <history>30d</history>
                     <trends>0</trends>
                     <value_type>LOG</value_type>
