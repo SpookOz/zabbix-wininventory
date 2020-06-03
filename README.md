@@ -24,6 +24,7 @@ Information Gathered --> Inventory Field
 - Windows Build --> Software application A
 - Windows Domain --> URL A
 - Windows OS Version --> OS (Short)
+- Geolocation --> Location
 
 
 ## Requirements
